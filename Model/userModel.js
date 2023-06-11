@@ -1,7 +1,8 @@
 // import { ObjectId } from "mongodb";
 import mongoose, { Schema, ObjectId } from "mongoose";
-import isEmail from "validator/lib/isemail";
-export default mongoose.model(
+import isEmail from "validator/lib/isemail.js";
+
+const User = mongoose.model(
   "User",
   new Schema({
     id: { type: ObjectId },
@@ -36,3 +37,4 @@ export default mongoose.model(
     },
   })
 );
+export default User;

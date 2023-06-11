@@ -3,6 +3,7 @@ import { userRepository, studentRepository } from "../repositories/index.js";
 import { EventEmitter } from "node:events";
 // login function
 import HttpStatusCode from "../Errors/HttpStatusCode.js";
+import Exception from "../Errors/Exception.js";
 const myEvent = new EventEmitter();
 myEvent.on("event.register.user", async (data) => {
   console.log(`they talk about : ${JSON.stringify(data)}`);
@@ -20,21 +21,34 @@ const login = async (req, res) => {
   await userRepository.login({ email, password });
   res.status(HttpStatusCode.OK).json({
     message: "Login Successfull",
+    //d
   });
 };
 //register function
 const register = async (req, res) => {
   const { name, email, password, phoneNumber, address } = req.body;
-  await userRepository.register({
-    name,
-    email,
-    password,
-    phoneNumber,
-    address,
-  });
   //event emitter
   myEvent.emit("event.register.user", { email, phoneNumber });
-  res.status(HttpStatusCode.CREATED).json({ message: "Register Successfully" });
+  try {
+    debugger;
+    const user = await userRepository.register({
+      name,
+      email,
+      password,
+      phoneNumber,
+      address,
+    });
+    res.status(HttpStatusCode.CREATED).json({
+      message: "Register Successfull",
+      data: user,
+    });
+  } catch (exception) {
+    debugger;
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: exception.toString(),
+    });
+    // throw new Exception(Exception.CANNOT_REGISTER_USER);
+  }
 };
 //get all users
 const getAllUsers = async (req, res) => {

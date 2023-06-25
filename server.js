@@ -1,13 +1,14 @@
 import express from "express";
 import * as dotenv from "dotenv";
 dotenv.config(); //must have
-import { usersRouter, studentRouter } from "./routes/index.js";
+import { usersRouter, studentRouter } from "./routes/indexRoute.js";
 import connect from "./database/database.js";
-
+//authentication middleware
+import checkToken from "./Auth/auth.js";
 const app = express();
-const port = process.env.PORT ?? 3000;
-
 app.use(express.json()); //must have
+app.use(checkToken); //shield
+const port = process.env.PORT ?? 3000;
 
 //router
 app.use("/users", usersRouter);

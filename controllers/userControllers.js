@@ -1,5 +1,6 @@
 import { body, validationResult } from "express-validator";
-import { userRepository, studentRepository } from "../repositories/index.js";
+import userRepository from "../repositories/userRepository.js";
+import studentRepository from "../repositories/studentRepository.js";
 import { EventEmitter } from "node:events";
 // login function
 import HttpStatusCode from "../Errors/HttpStatusCode.js";
@@ -18,11 +19,18 @@ const login = async (req, res) => {
   }
   const { email, password } = req.body;
   //call repository
-  await userRepository.login({ email, password });
-  res.status(HttpStatusCode.OK).json({
-    message: "Login Successfull",
-    //d
-  });
+  try {
+    let existingUser = await userRepository.login({ email, password });
+    res.status(HttpStatusCode.OK).json({
+      message: "Login Successfull",
+      //data : "detail user information here"
+      data: existingUser,
+    });
+  } catch (exception) {
+    res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: exception.toString(),
+    });
+  }
 };
 //register function
 const register = async (req, res) => {
@@ -30,8 +38,8 @@ const register = async (req, res) => {
   //event emitter
   myEvent.emit("event.register.user", { email, phoneNumber });
   try {
-    debugger;
-    const user = await userRepository.register({
+    // debugger;
+    let user = await userRepository.register({
       name,
       email,
       password,
@@ -43,7 +51,7 @@ const register = async (req, res) => {
       data: user,
     });
   } catch (exception) {
-    debugger;
+    // debugger;
     res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({
       message: exception.toString(),
     });

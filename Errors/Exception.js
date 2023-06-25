@@ -6,8 +6,12 @@ export default class Exception extends Error {
   static CANNOT_CONNECT_TO_DATABASE = "Can not connect to database";
   static USER_EXIST = "User already exists";
   static CANNOT_REGISTER_USER = "Can not register user";
-  constructor(message) {
+  static WRONG_EMAIL_PASSWORD = "Wrong email and password";
+  static CANNOT_INSERT_STUDENT = "Can not insert student";
+  static VALIDATION_ERROR = "Validation error";
+  constructor(message, validationErrors = {}) {
     super(message);
     print(message, OutputType.ERROR);
+    this.validationErrors = validationErrors;
   }
 }

@@ -1,6 +1,6 @@
 import express from "express";
 import { body, validationResult } from "express-validator";
-import { userControllers } from "../controllers/index.js";
+import userControllers from "../controllers/userControllers.js";
 const router = express.Router();
 
 router.get("/:id", userControllers.getDetailUser);

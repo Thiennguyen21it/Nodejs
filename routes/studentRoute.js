@@ -1,5 +1,5 @@
 import express from "express";
-import { studentControllers } from "../controllers/index.js";
+import studentControllers from "../controllers/studentControllers.js";
 
 const router = express.Router();
 router.get("/", studentControllers.getAllStudents);
@@ -10,6 +10,7 @@ router.get("/:id", studentControllers.getStudentById);
 
 router.patch("/", studentControllers.updateStudent);
 
-router.post("/", studentControllers.insertStudent);
+router.post("/insert", studentControllers.insertStudent);
+router.post("/generaterFakeStudent", studentControllers.generateFakeStudent);
 
 export default router;
